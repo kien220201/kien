@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.controller;
 
+import com.example.schoolmanagement.model.Course;
 import com.example.schoolmanagement.model.Student;
 import com.example.schoolmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,4 +65,24 @@ public class StudentController {
         studentService.deleteStudent(id);
         return "redirect:/students";
     }
+
+    @PostMapping("/{studentId}/register/{courseId}")
+    public String registerCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
+        studentService.registerCourse(studentId, courseId);
+        return "redirect:/students/" + studentId;
+    }
+
+    @DeleteMapping("/{studentId}/unregister/{courseId}")
+    public String unregisterCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
+        studentService.unregisterCourse(studentId, courseId);
+        return "redirect:/students/" + studentId;
+    }
+
+    @GetMapping("/{studentId}/registeredCourses")
+    public String getRegisteredCourses(@PathVariable Long studentId, Model model) {
+        List<Course> courses = studentService.getRegisteredCourses(studentId);
+        model.addAttribute("courses", courses);
+        return "studentRegisteredCourses";
+    }
+
 }
