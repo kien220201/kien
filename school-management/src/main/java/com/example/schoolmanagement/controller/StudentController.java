@@ -24,7 +24,7 @@ public class StudentController {
     public String getAllStudents(Model model) {
         List<Student> students = studentService.getAllStudents();
         model.addAttribute("students", students);
-        return "student-list";
+        return "students";
     }
 
     @GetMapping("/{id}")
@@ -34,11 +34,12 @@ public class StudentController {
         return "student-details";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/add")
     public String showAddStudentForm(Model model) {
         model.addAttribute("student", new Student());
-        return "student-form";
+        return "addStudents";
     }
+
 
     @PostMapping
     public String addStudent(@ModelAttribute("student") Student student) {
@@ -46,19 +47,25 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @GetMapping("/{id}/edit")
-    public String showEditStudentForm(@PathVariable Long id, Model model) {
+
+    @GetMapping("/edit-student/{id}")
+    public String editStudent(@PathVariable("id") Long id, Model model) {
         Student student = studentService.getStudentById(id);
         model.addAttribute("student", student);
-        return "student-form";
+        return "edit-students";
     }
 
+
     @PostMapping("/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student) {
+    public String updateStudent(@PathVariable("id") Long id, @ModelAttribute("student") Student updatedStudent) {
+        Student student = studentService.getStudentById(id);
         student.setId(id);
+        student.setName(updatedStudent.getName());
+        student.setAge(updatedStudent.getAge());
         studentService.updateStudent(student);
         return "redirect:/students";
     }
+
 
     @GetMapping("/{id}/delete")
     public String deleteStudent(@PathVariable Long id) {

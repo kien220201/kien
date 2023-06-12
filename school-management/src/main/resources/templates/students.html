@@ -1,35 +1,68 @@
-<!-- students.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Quản lý học sinh</title>
+    <title>Students</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        a.button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        a.button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-<h1>Danh sách học sinh</h1>
+<h1>List of Students</h1>
 <table>
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Tên</th>
-        <th>Tuổi</th>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>Student Age</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
+    <!-- Loop through students and display student information -->
     <tr th:each="student : ${students}">
         <td th:text="${student.id}"></td>
         <td th:text="${student.name}"></td>
         <td th:text="${student.age}"></td>
+        <td>
+            <a class="button" th:href="@{/students/edit-student/{id}(id=${student.id})}">Edit</a>
+            <a class="button" th:href="@{/students/{id}/delete(id=${student.id})}" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+        </td>
     </tr>
+
     </tbody>
 </table>
-<h2>Thêm mới học sinh</h2>
-<form th:action="@{/students}" method="post">
-    <label for="name">Tên:</label>
-    <input type="text" id="name" name="name" required><br>
-    <label for="age">Tuổi:</label>
-    <input type="number" id="age" name="age" required><br>
-    <button type="submit">Thêm</button>
-</form>
+<a class="button" th:href="@{/students/add}">Add Student</a>
 </body>
 </html>

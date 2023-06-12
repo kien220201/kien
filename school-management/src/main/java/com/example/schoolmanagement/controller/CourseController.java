@@ -6,8 +6,10 @@ import com.example.schoolmanagement.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import org.springframework.ui.Model;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/courses")
@@ -31,6 +33,12 @@ public class CourseController {
         Course course = courseService.getCourseById(id);
         model.addAttribute("course", course);
         return "courseDetails";
+    }
+
+    @GetMapping("/add-course")
+    public String showAddCourseForm(Model model) {
+        model.addAttribute("course", new Course());
+        return "addCourses";
     }
 
     @PostMapping
@@ -64,12 +72,11 @@ public class CourseController {
         return "redirect:/courses/" + courseId;
     }
 
-    @GetMapping("/{studentId}/courses")
+    @GetMapping("/courses/{studentId}")
     public String getRegisteredCoursesByStudentId(@PathVariable Long studentId, Model model) {
-        CourseController studentService = null;
-        List<Course> courses = studentService.getRegisteredCoursesByStudentId(studentId);
+        List<Course> courses = courseService.getRegisteredCourses(studentId);
         model.addAttribute("courses", courses);
-        return "studentRegisteredCourses";
+        return "registered_courses";
     }
 
     @GetMapping("/{courseId}/students")
@@ -81,7 +88,7 @@ public class CourseController {
 
     @GetMapping("/mostPopular")
     public String getMostPopularCourses(Model model) {
-        List<Course> courses = courseService.getMostPopularCourses();
+        List<Course> courses = (List<Course>) courseService.getMostPopularCourses();
         model.addAttribute("courses", courses);
         return "mostPopularCourses";
     }
