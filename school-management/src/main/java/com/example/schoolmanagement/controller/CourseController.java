@@ -3,18 +3,21 @@ package com.example.schoolmanagement.controller;
 import com.example.schoolmanagement.model.Course;
 import com.example.schoolmanagement.model.Student;
 import com.example.schoolmanagement.service.CourseService;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
     private final CourseService courseService;
+    private LogManager enrollmentRepository;
 
     @Autowired
     public CourseController(CourseService courseService) {
@@ -47,18 +50,31 @@ public class CourseController {
         return "redirect:/courses";
     }
 
-    @PutMapping("/{id}")
-    public String updateCourse(@PathVariable Long id, @ModelAttribute("course") Course course) {
+    @GetMapping("/edit-course/{id}")
+    public String editCourse(@PathVariable("id") Long id, Model model) {
+        Course course = courseService.getCourseById(id);
+        model.addAttribute("course", course);
+        return "edit-courses";
+    }
+
+    @PostMapping("/{id}")
+    public String updateCourse(@PathVariable("id") Long id, @ModelAttribute("course") Course updatedCourse) {
+        Course course = courseService.getCourseById(id);
         course.setId(id);
+        course.setName(updatedCourse.getName());
+        course.setDescription(updatedCourse.getDescription());
         courseService.updateCourse(course);
         return "redirect:/courses";
     }
 
-    @DeleteMapping("/{id}")
+
+
+    @GetMapping("/{id}/delete")
     public String deleteCourse(@PathVariable Long id) {
         courseService.deleteCourse(id);
         return "redirect:/courses";
     }
+
 
     @PostMapping("/{courseId}/register/{studentId}")
     public String registerStudentForCourse(@PathVariable Long courseId, @PathVariable Long studentId) {
@@ -92,4 +108,18 @@ public class CourseController {
         model.addAttribute("courses", courses);
         return "mostPopularCourses";
     }
+
+    @GetMapping("/enrolled-students/{courseId}")
+    public ResponseEntity<List<Student>> getEnrolledStudents(@PathVariable Long courseId) {
+        List<Student> enrolledStudents = new ArrayList<>();
+
+        Course course = courseService.getCourseById(courseId);
+        if (course != null) {
+            List<Student> students = course.getStudents();
+            enrolledStudents.addAll(students);
+        }
+
+        return ResponseEntity.ok(enrolledStudents);
+    }
+
 }

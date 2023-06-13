@@ -58,6 +58,7 @@
         <td>
             <a class="button" th:href="@{/students/edit-student/{id}(id=${student.id})}">Edit</a>
             <a class="button" th:href="@{/students/{id}/delete(id=${student.id})}" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+            <a class="button" th:href="@{/students/{studentId}/registeredCourses(studentId=${student.id})}">View</a>
         </td>
     </tr>
 

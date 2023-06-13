@@ -1,10 +1,6 @@
 package com.example.schoolmanagement.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -60,4 +56,9 @@ public class Course {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Enrollment> enrollments;
+
+
 }

@@ -76,20 +76,25 @@ public class StudentController {
     @PostMapping("/{studentId}/register/{courseId}")
     public String registerCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
         studentService.registerCourse(studentId, courseId);
-        return "redirect:/students/" + studentId;
+        return "redirect:/students/" + studentId + "/registeredCourses";
     }
 
     @DeleteMapping("/{studentId}/unregister/{courseId}")
     public String unregisterCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
         studentService.unregisterCourse(studentId, courseId);
-        return "redirect:/students/" + studentId;
+        return "redirect:/students/" + studentId + "/registeredCourses";
     }
 
     @GetMapping("/{studentId}/registeredCourses")
     public String getRegisteredCourses(@PathVariable Long studentId, Model model) {
-        List<Course> courses = studentService.getRegisteredCourses(studentId);
-        model.addAttribute("courses", courses);
-        return "studentRegisteredCourses";
+        Student student = studentService.getStudent(studentId); // Sửa thành getStudent
+        List<Course> registeredCourses = studentService.getRegisteredCourses(studentId);
+        List<Course> availableCourses = studentService.getAvailableCourses(studentId);
+        model.addAttribute("student", student);
+        model.addAttribute("registeredCourses", registeredCourses);
+        model.addAttribute("availableCourses", availableCourses);
+        return "registeredCourses";
     }
+
 
 }
