@@ -57,8 +57,7 @@ public class Course {
         this.students = students;
     }
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Enrollment> enrollments;
+
 
 
 }
