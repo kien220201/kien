@@ -3,12 +3,13 @@ package com.example.schoolmanagement.controller;
 import com.example.schoolmanagement.model.Course;
 import com.example.schoolmanagement.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/courses")
 public class CourseController {
     private final CourseService courseService;

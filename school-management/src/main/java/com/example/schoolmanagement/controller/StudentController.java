@@ -87,7 +87,7 @@ public class StudentController {
 
     @GetMapping("/{studentId}/registeredCourses")
     public String getRegisteredCourses(@PathVariable Long studentId, Model model) {
-        Student student = studentService.getStudent(studentId); // Sửa thành getStudent
+        Student student = studentService.getStudent(studentId);
         List<Course> registeredCourses = studentService.getRegisteredCourses(studentId);
         List<Course> availableCourses = studentService.getAvailableCourses(studentId);
         model.addAttribute("student", student);
@@ -95,6 +95,4 @@ public class StudentController {
         model.addAttribute("availableCourses", availableCourses);
         return "registeredCourses";
     }
-
-
 }

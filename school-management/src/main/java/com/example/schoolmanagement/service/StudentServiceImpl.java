@@ -99,7 +99,8 @@ public class StudentServiceImpl implements StudentService {
             student.setCourses(registeredCourses);
             studentRepository.save(student);
 
-            RegisteredCourse registeredCourse = registeredCourseRepository.findByStudentAndCourse(student, course);
+            RegisteredCourse registeredCourse = registeredCourseRepository.findFirstByStudentAndCourse(student, course);
+            ;
             if (registeredCourse != null) {
                 registeredCourseRepository.delete(registeredCourse);
             }
