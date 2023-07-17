@@ -19,6 +19,7 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+
     @GetMapping
     public String getAllCourses(Model model) {
         List<Course> courses = courseService.getAllCourses();
